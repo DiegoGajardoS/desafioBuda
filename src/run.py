@@ -1,10 +1,8 @@
 from flask import Flask, jsonify
+from app.routes import bp as api_bp
 
 app = Flask(__name__)
-
-@app.route('/', methods=['GET'])
-def ping():
-	return jsonify({"response": "Hola mundo"})
+app.register_blueprint(api_bp)
 
 if __name__ == '__main__':
 	app.run(host="0.0.0.0", port=5000, debug=True)
