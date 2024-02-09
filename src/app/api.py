@@ -9,3 +9,14 @@ def obtener_datos_mercado(mercado):
 		return response.json()
 	else:
 		return {'error', 'no se logran obtener los datos de este mercado'}
+
+
+def obtener_mercados():
+
+	url = f'https://www.buda.com/api/v2/tickers'
+	response = requests.get(url)
+	if response.status_code == 200:
+		return response.json()
+	else:
+		return {'error', 'no se logran obtener los datos de los mercados'}
+
