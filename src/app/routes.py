@@ -5,7 +5,10 @@ from app.api import obtener_datos_mercado
 from app.api import obtener_mercados
 from app.data_processing import obtener_spread_mercado
 from app.data_processing import obtener_idMercados
+from app.data_processing import guardar_spread_alerta
+from app.data_processing import encontrar_spread
 from app.globals import spreads_alerta
+
 import json
 
 # Se crea un Blueprint llamado 'api' que se utilizará para definir las rutas relacionadas con la API.
@@ -69,36 +72,21 @@ def getMercados():
 #Salida: retorna el mensaje de creacion o actualización del spread de alerta
 @bp.route('/spread/alerta', methods=['POST'])
 def guardar_spread():
-    #se usa la variable global pa registrar los spreads de alerta
+    #uso los spreads de alerta para almacenar el spread
     global spreads_alerta
-    #se obtienen los datos ingresados por el usuario en formato JSON
+    #obtengo los datos del JSON ingresado
     data = request.json
-    #se almacena el market_id y el spread a guardar provenientes del JSON de entrada
     market_id = data.get('market_id')
     spread_nuevo = data.get('spread')
-    #si el JSON de entrada no posee los datos se retorna un error
+    #si el JSON no contiene los datos se retorna un mensaje de error
     if market_id is None or spread_nuevo is None:
         return jsonify({'error': 'El JSON enviado no contiene market_id o spread'}), 400
-
+    #en caso contrario, se almacena el spread y se identifica si fue una actualizacion o un nuevo spread
     else:
-        #se crea una variable de validacion para identificar si es una actualizacion o un nuevo spread de alerta
-        val = True;
-        #se convierte el market_id en mayúscula
-        mercadoUpper = market_id.upper()
-        #se busca el market_id en los spreads de alerta almacenados
-        for spread in spreads_alerta:
-            #en caso de encontrar coincidencias se actualiza el spread y se cambia la variable de validacion
-            if spread['market_id'] == mercadoUpper:
-                spread['spread'] = spread_nuevo
-                val = False
-                #se retorna el mensaje de actualizacion
-                return jsonify({'mensaje': 'Spread de alerta actualizado correctamente'}), 200
-        #en el caso de no encontrar el market_id en los spreads guardados se crea un nuevo spread de alerta
-        if val: 
-            spreads_alerta.append({'market_id': mercadoUpper, 'spread': spread_nuevo})
-            #se retorna el mensaje de creacion de spread de alerta
+        if guardar_spread_alerta(spreads_alerta, market_id, spread_nuevo):
+            return jsonify({'mensaje': 'Spread de alerta actualizado correctamente'}), 200
+        else:
             return jsonify({'mensaje': 'Spread de alerta guardado correctamente'}), 200
-
 
 #Ruta para realizar la comparacion del spread de alerta con el spread actual del mercado
 #Entrada: recibe como un string el 'mercado', el cual es el market_id del mercado
@@ -110,19 +98,14 @@ def consultar_spread_alerta(mercado):
     #en caso de que no existan se retorna un mensaje
     if not spreads_alerta:
          return jsonify({'mensaje': 'No se han establecido spreads de alerta'}), 404
-    #se inicializa una variable del spread guardado
-    spread_guardado = 0
-    #se inicializa una variable booleana para identificar si hay un spread guardado como alerta del mercado en cuestion
-    encontrado = False
-    #se recorre la lista de spreads guardados para buscar el spread guardado como alerta para el mercado en cuestion
-    for spread in spreads_alerta:
-        mercadoUpper = mercado.upper()
-        if spread['market_id'] == mercadoUpper:
-            encontrado = True
-            spread_guardado = float(spread['spread'])
+    #se convierte el market_id en mayúscula     
+    mercadoUpper = mercado.upper()
+    #buscar existencia de spread     
+    existe_spread = encontrar_spread(spreads_alerta, mercadoUpper)
     #en el caso de encontrar un spread guardado como alerta para ese mercado se obtiene el spread actual del mercado
-    if encontrado:
-           spread_actual = spread_mercado(mercado)
+    if existe_spread[0]:
+           spread_guardado = existe_spread[1]
+           spread_actual = spread_mercado(mercadoUpper)
            valor_spread_actual = spread_actual['spread']
            #se realizan las comparaciones entre el spread guardado como alerta y el spread actual, para luego retornar el mensaje correspondiente junto a los spreads y el market_id
            if valor_spread_actual > spread_guardado:

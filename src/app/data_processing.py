@@ -30,3 +30,30 @@ def obtener_idMercados(mercados):
 		i=i+1
 	return markets_id
 
+def guardar_spread_alerta(spreads_alerta, market_id, spread_nuevo):
+	#se convierte el market_id en mayúscula
+    mercadoUpper = market_id.upper()
+    #se busca el spread en los spreads de alerta guardados
+    for spread in spreads_alerta:
+        if spread['market_id'] == mercadoUpper:
+            spread['spread'] = spread_nuevo
+            #si lo encuentra se actualiza y se retorna un True para identificar que fue una actualizacion
+            return True  
+    #si no lo encuentra se agrega un nuevo spread de alerta y se retorna un False para identificar que es un nuevo spread
+    spreads_alerta.append({'market_id': mercadoUpper, 'spread': spread_nuevo})
+    return False  
+
+def encontrar_spread(spreads_alerta,market_id):
+	#se inicializa una variable del spread guardado
+    spread_guardado = None
+    #se inicializa una variable booleana para identificar si hay un spread guardado como alerta del mercado en cuestion
+    encontrado = False
+    #se recorre la lista de spreads guardados para buscar el spread guardado como alerta para el mercado en cuestion
+    for spread in spreads_alerta:
+        
+        if spread['market_id'] == market_id:
+            encontrado = True
+            spread_guardado = float(spread['spread'])
+        return [encontrado,spread_guardado]
+
+    return [encontrado,spread_guardado]
