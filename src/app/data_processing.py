@@ -1,5 +1,11 @@
+#Bloque de importaciones
 import json
 
+#Funcionalidades
+
+# Entrada: Diccionario con los datos de un mercado 
+# Salida: Diccionario con el market_id y el spread del mercado
+# La función se encarga de encontrar el spread (la diferencia entre la orden de venta más barata y la orden de compra más cara) del mercado
 def obtener_spread_mercado(datos_mercado):
 
 	max_bid = float(datos_mercado['ticker']['max_bid'][0])
@@ -11,6 +17,9 @@ def obtener_spread_mercado(datos_mercado):
 	json_string = json.dumps(json_data)
 	return json_string
 
+# Entrada: Diccionario con los datos de todos los mercados disponibles
+# Salida: Una lista de markets_id
+# La función se encarga de encontrar los id de todos los mercados disponibles 
 def obtener_idMercados(mercados):
 	cant_mercados = len(mercados['markets'])
 	markets_id = []
