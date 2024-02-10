@@ -1,8 +1,8 @@
 import requests
 
 def obtener_datos_mercado(mercado):
-
-	url = f'https://www.buda.com/api/v2/markets/{mercado}/ticker'
+	mercadoUpper = mercado.upper()
+	url = f'https://www.buda.com/api/v2/markets/{mercadoUpper}/ticker'
 	response = requests.get(url)
 	
 	if response.status_code == 200:
@@ -13,7 +13,7 @@ def obtener_datos_mercado(mercado):
 
 def obtener_mercados():
 
-	url = f'https://www.buda.com/api/v2/tickers'
+	url = f'https://www.buda.com/api/v2/markets'
 	response = requests.get(url)
 	if response.status_code == 200:
 		return response.json()

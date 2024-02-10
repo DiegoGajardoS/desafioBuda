@@ -12,11 +12,11 @@ def obtener_spread_mercado(datos_mercado):
 	return json_string
 
 def obtener_idMercados(mercados):
-	cant_mercados = len(mercados['tickers'])
+	cant_mercados = len(mercados['markets'])
 	markets_id = []
 	i=0
 	while i < cant_mercados:
-		market_id = mercados['tickers'][i]['market_id']
+		market_id = mercados['markets'][i]['id']
 		markets_id.append(market_id)
 		i=i+1
 	return markets_id

@@ -26,6 +26,7 @@ def getMercados():
         i = 0
         while i < len(ids):
             datos_mercado = obtener_datos_mercado(ids[i])
+            spread = []
             if datos_mercado:
                 spread = obtener_spread_mercado(datos_mercado)
                 spread_dict = json.loads(spread) 
