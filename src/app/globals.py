@@ -1,0 +1,1 @@
+spreads_alerta = []

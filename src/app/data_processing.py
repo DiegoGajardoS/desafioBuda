@@ -7,7 +7,7 @@ def obtener_spread_mercado(datos_mercado):
 	spread = abs(max_bid - min_ask)
 
 	data = (datos_mercado['ticker']['market_id'],spread)
-	json_data = {'market-id': data[0], 'spread': data[1]}
+	json_data = {'market_id': data[0], 'spread': data[1]}
 	json_string = json.dumps(json_data)
 	return json_string
 
