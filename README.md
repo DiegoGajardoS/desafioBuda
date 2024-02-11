@@ -204,9 +204,8 @@
 
 ## Como ejecutar: 
 
-- en este repositorio se encuentra un archivo llamado spread_api.tar, el cual corresponde a una imagen docker
-- una vez obtenido este archivo, de manera local en su consola se debe digitar el comando: docker load < spread_api.tar
-- una vez que se ha cargado la imagen docker, para ejecutar el proyecto se debe digitar en la consola el comando: docker run -it --publish puerto:5000 spread_api
-- el valor del puerto lo indica el usuario de modo que por ejemplo al ejecutar: docker run -it --publish 8000:5000 spread_api, las consultas HTTP se deben realizar en ese puerto, como http://localhost:8000/spread
-- para ejecutar los tests, una vez cargada la imagen se digita el comando en consola: docker run spread_api pytest -v
+- primero se debe clonar la imagen docker, digitando en la consola: docker pull del1r1um/spread_api:latest
+- una vez que se ha clonado la imagen docker, para ejecutar el proyecto se debe digitar en la consola el comando: docker run -it --publish puerto:5000 del1r1um/spread_api
+- el valor del puerto lo indica el usuario de modo que por ejemplo al ejecutar: docker run -it --publish 8000:5000 del1r1um/spread_api, las consultas HTTP se deben realizar en ese puerto, como http://localhost:8000/spread
+- para ejecutar los tests, una vez cargada la imagen se digita el comando en consola: docker run del1r1um/spread_api pytest -v
 
