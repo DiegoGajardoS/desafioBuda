@@ -37,12 +37,12 @@
 
 ### Spread mercado específico:
 
-- localhost:<puerto>/spread/<mercado> | método: GET
+- localhost:'puerto'/spread/'mercado' | método: GET
 
 #### Parámetros de solicitud: 
 
-- <puerto> corresponde al puerto otorgado en la ejecución de la imagen docker
-- <mercado> corresponde al market_id del mercado
+- 'puerto' corresponde al puerto otorgado en la ejecución de la imagen docker
+- 'mercado' corresponde al market_id del mercado
 
 #### Respuestas esperadas: 
 
@@ -61,7 +61,7 @@
 
 ### Spread todos los mercados:
 
-- localhost:<puerto>/spread | método: GET
+- localhost:'puerto'/spread | método: GET
 
 #### Parámetros de solicitud: 
 
@@ -87,13 +87,13 @@
 
 ### Guardar spread de alerta:
 
-- localhost:<puerto>/spread/alerta | método: POST | 
+- localhost:'puerto'/spread/alerta | método: POST | 
 
 #### Parámetros de solicitud:
 
-- <puerto> corresponde al puerto otorgado en la ejecución de la imagen docker
-- JSON de formato: { "market_id": "<market_id>","spread": <numero>}
-	siendo <market_id> el id del mercado del cual se quiere registrar o actualizar una alerta
-	y <numero> el valor del spread que se desea registrar
+- 'puerto' corresponde al puerto otorgado en la ejecución de la imagen docker
+- JSON de formato: { "market_id": "'market_id'","spread": 'numero'}
+	siendo 'market_id' el id del mercado del cual se quiere registrar o actualizar una alerta
+	y 'numero' el valor del spread que se desea registrar
 	
 #### Respuestas esperadas:
