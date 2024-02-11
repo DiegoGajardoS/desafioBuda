@@ -1,13 +1,13 @@
 #Bloque de importaciones
 
 from flask import Blueprint, jsonify, request
-from app.api import obtener_datos_mercado
-from app.api import obtener_mercados
-from app.data_processing import obtener_spread_mercado
-from app.data_processing import obtener_idMercados
-from app.data_processing import guardar_spread_alerta
-from app.data_processing import encontrar_spread
-from app.globals import spreads_alerta
+from .api import obtener_datos_mercado
+from .api import obtener_mercados
+from .data_processing import obtener_spread_mercado
+from .data_processing import obtener_idMercados
+from .data_processing import guardar_spread_alerta
+from .data_processing import encontrar_spread
+from .globals import spreads_alerta
 
 import json
 
@@ -23,7 +23,7 @@ bp = Blueprint('api', __name__)
 @bp.route('/spread/<mercado>', methods=['GET'])
 def spread_mercado(mercado):
     datos_mercado = obtener_datos_mercado(mercado)
-    if datos_mercado:
+    if datos_mercado != {'error', 'no se logran obtener los datos de este mercado'}:
         spread = obtener_spread_mercado(datos_mercado)
         spread_dict = json.loads(spread)
         return spread_dict

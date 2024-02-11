@@ -2,7 +2,6 @@
 from flask import Flask, jsonify
 from app.routes import bp as api_bp
 
-
 #se crea la instancia de la aplicación Flask
 app = Flask(__name__)
 #se registra el blueprint(api_bp) en la aplicación Flask
