@@ -39,7 +39,7 @@ def getMercados():
     spreads = []
     #obtengo todos los mercados
     mercados = obtener_mercados()
-    if mercados:
+    if mercados != {'error', 'no se logran obtener los datos de los mercados'}:
         #obtengo todos los id de los mercados (market_id)
         ids = obtener_idMercados(mercados)
         i = 0
@@ -49,7 +49,7 @@ def getMercados():
             datos_mercado = obtener_datos_mercado(ids[i])
             #defino donde guardar el spread del mercado en específico
             spread = []
-            if datos_mercado:
+            if datos_mercado != {'error', 'no se logran obtener los datos de este mercado'}:
                 #obtengo el spread del mercado
                 spread = obtener_spread_mercado(datos_mercado)
                 #convierto el spread en un diccionario
