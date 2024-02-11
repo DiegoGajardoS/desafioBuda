@@ -32,26 +32,25 @@
 - archivo test_routes.py: contiene los tests de las funcionalidades del archivo routes.py
 - los archivos __init__.py son para indicar a Python que el directorio funcione como un paquete
 
-## Endpoints:
 
+## Rutas disponibles:
+
+- consultar spread mercado 'X' : http://localhost:puerto/spread/X
+- consultar spread de todos los mercados: http://localhost:puerto/spread
+- crear spread de alerta: http://localhost:puerto/spread/alerta
+- consultar spreade de alerta de mercado 'X' http://localhost:puerto/spread/alerta/X
+
+
+## Endpoints:
 
 ### Spread mercado específico:
 
-<<<<<<< HEAD
-- localhost:'puerto'/spread/'mercado' | método: GET
+- localhost:puerto/spread/mercado | método: GET
 
 #### Parámetros de solicitud: 
 
-- 'puerto' corresponde al puerto otorgado en la ejecución de la imagen docker
-- 'mercado' corresponde al market_id del mercado
-=======
-- localhost:<<puerto>>/spread/<<mercado>> | método: GET
-
-#### Parámetros de solicitud: 
-
-- <<puerto>> corresponde al puerto otorgado en la ejecución de la imagen docker
-- <<mercado>> corresponde al market_id del mercado
->>>>>>> c4da006ef925102540c62f2f1d010bef3b113fa2
+- puerto corresponde al puerto otorgado en la ejecución de la imagen docker
+- mercado corresponde al market_id del mercado
 
 #### Respuestas esperadas: 
 
@@ -68,17 +67,15 @@
   
   ruta a consumir, usando puerto 5000: http://localhost:5000/spread/X
 
+
+
 ### Spread todos los mercados:
 
-<<<<<<< HEAD
-- localhost:'puerto'/spread | método: GET
-=======
-- localhost:<<puerto>>/spread | método: GET
->>>>>>> c4da006ef925102540c62f2f1d010bef3b113fa2
+- localhost:puerto/spread | método: GET
 
 #### Parámetros de solicitud: 
 
-- no requiere parámetros
+- puerto corresponde al puerto otorgado en la ejecución de la imagen docker
 
 #### Respuestas esperadas:
 
@@ -98,26 +95,118 @@
 
 - ruta a consumir, usando puerto 5000: http://localhost:5000/spread
 
+
+
 ### Guardar spread de alerta:
 
-<<<<<<< HEAD
-- localhost:'puerto'/spread/alerta | método: POST | 
+- localhost:puerto/spread/alerta | método: POST 
 
 #### Parámetros de solicitud:
 
-- 'puerto' corresponde al puerto otorgado en la ejecución de la imagen docker
+- puerto corresponde al puerto otorgado en la ejecución de la imagen docker
 - JSON de formato: { "market_id": "'market_id'","spread": 'numero'}
 	siendo 'market_id' el id del mercado del cual se quiere registrar o actualizar una alerta
 	y 'numero' el valor del spread que se desea registrar
-=======
-- localhost:<<puerto>>/spread/alerta | método: POST | 
-
-#### Parámetros de solicitud:
-
-- <puerto> corresponde al puerto otorgado en la ejecución de la imagen docker
-- JSON de formato: { "market_id": "<<market_id>>","spread": <<numero>>}
-	siendo <<market_id>> el id del mercado del cual se quiere registrar o actualizar una alerta
-	y <numero> el valor del spread que se desea registrar
->>>>>>> c4da006ef925102540c62f2f1d010bef3b113fa2
 	
 #### Respuestas esperadas:
+
+- en el caso de que no exista un spread de alerta previamente guardado para el mercado, se espera una respuesta JSON de tipo: 
+  {"mensaje": "Spread de alerta guardado correctamente"}
+- en el caso de que exista un spread de alerta previamente guardado para el mercado, se espera una respuesta JSON de tipo: 
+  {"mensaje": "Spread de alerta actualizado correctamente"}
+- en el caso de que el JSON enviado no contenga el market_id o un spread, se espera una respuesta JSON de tipo: 
+  {"error": "El JSON enviado no contiene market_id o spread"}
+
+#### Ejemplos de uso:
+
+- guardar nuevo spread: 
+  
+  ruta a consumir, usando puerto 5000: http://localhost:5000/spread/alerta
+
+  JSON enviado, por ejemplo mediante postman para consumir el endpoint: 
+  
+  { "market_id": "BTC-CLP",
+    "spread": 800000 
+  }
+
+- actualizar spread: 
+  
+  ruta a consumir, usando puerto 5000: http://localhost:5000/spread/alerta
+
+  asumiendo que ya existe un spread para el mercado BTC-CLP
+
+  JSON enviado, por ejemplo mediante postman para consumir el endpoint: 
+
+  { "market_id": "BTC-CLP",
+    "spread": 900000 
+  }
+
+- JSON con error: 
+  
+  ruta a consumir, usando puerto 5000: http://localhost:5000/spread/alerta
+
+  JSON enviado, por ejemplo mediante postman para consumir el endpoint: 
+
+  { 
+    "spread": 800000 
+  }
+
+
+### Consultar spread de alerta:
+
+- localhost:puerto/spread/alerta/mercado | método: GET 
+
+#### Parámetros de solicitud: 
+
+- puerto corresponde al puerto otorgado en la ejecución de la imagen docker
+- mercado corresponde al market_id del mercado
+
+#### Respuestas esperadas: 
+
+- en el caso de que el spread actual sea menor al spread guardado, se espera una respuesta del tipo:
+  {
+  "market_id": 'market_id',
+  "mensaje": "El spread actual es menor al spread guardado",
+  "spread actual": valor_actual,
+  "spread guardado": valor guardado
+  }
+- en el caso de que el spread actual sea mayor al spread guardado, se espera una respuesta del tipo:
+  {
+  "market_id": 'market_id',
+  "mensaje": "El spread actual es mayor al spread guardado",
+  "spread actual": valor_actual,
+  "spread guardado": valor guardado
+  }
+- en el caso de que el spread actual sea igual al spread guardado, se espera una respuesta del tipo:
+  {
+  "market_id": 'market_id',
+  "mensaje": "El spread actual es igual al spread guardado",
+  "spread actual": valor_actual,
+  "spread guardado": valor guardado
+  }
+- en el caso de que no exista un spread guardado para el mercado, se espera una respuesta del tipo: 
+  {
+  "mensaje": "No hay spread guardado para este mercado"
+  }
+
+#### Ejemplos de uso:
+
+- consultar spread del mercado 'BTC-CLP': 
+  ruta a consumir usando el puerto 5000: http://localhost:5000/spread/alerta/BTC-CLP
+
+- consultar spread de un mercado del que no se registra spread, por ejemplo 'UF-US'
+  ruta a consumir usando el puerto 5000: http://localhost:5000/spread/alerta/UF-US
+
+
+### Consideraciones:
+
+- Al no registrar el spread de alerta en una base de datos, para poder consultar si existe una alerta en las pruebas primero se debe crear la alerta del  mercado en cada ejecución nueva de la api
+
+## Como ejecutar: 
+
+- en este repositorio se encuentra un archivo llamado spread_api.tar, el cual corresponde a una imagen docker
+- una vez obtenido este archivo, de manera local en su consola se debe digitar el comando: docker load < spread_api.tar
+- una vez que se ha cargado la imagen docker, para ejecutar el proyecto se debe digitar en la consola el comando: docker run -it --publish puerto:5000 spread_api
+- el valor del puerto lo indica el usuario de modo que por ejemplo al ejecutar: docker run -it --publish 8000:5000 spread_api, las consultas HTTP se deben realizar en ese puerto, como http://localhost:8000/spread
+- para ejecutar los tests, una vez cargada la imagen se digita el comando en consola: docker run spread_api pytest -v
+
